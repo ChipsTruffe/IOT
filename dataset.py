@@ -1,6 +1,6 @@
 import pandas as pd
 from datetime import datetime, timedelta
-
+from math import *
 def import_filter_data(file, start_date, stop_date, place):
     data = pd.read_csv(file, delimiter=';')
     data = data[data["NUM_POSTE"] == place]
@@ -31,9 +31,16 @@ def t_to_date(t: int, start_date: int): # t un nombre d'heures, start_date au fo
     # Format back to YYYYMMDDHH
     return int(new_date.strftime("%Y%m%d%H"))
 
-def t_to_values(data : pd.DataFrame, t : int, keys : list):
-    date = t_to_date(t, int(data["AAAAMMJJHH"].iloc[0]))
-    return date_to_values(data, date, keys)
+def t_to_values(data : pd.DataFrame, t : float, keys : list): # t un flottant quelconque, retourne les valeurs par interpolation linéaire entre les deux observations les plus proches
+    date1 = t_to_date(floor(t), int(data["AAAAMMJJHH"].iloc[0]))
+    date2 = t_to_date(floor(t)+1, int(data["AAAAMMJJHH"].iloc[0]))
+
+    tau = t - floor(t)
+
+    v1 = date_to_values(data, date1, keys)
+    v2 = date_to_values(data, date2, keys)
+
+    return {key : (1-tau)*v1[key] + tau*v2[key] for key in keys}
 
 print(t_to_values(data, 6, ["T"]))
 
