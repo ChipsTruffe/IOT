@@ -21,23 +21,30 @@ class Environment:
     def update(self, dt):
         self.time += dt # en secondes
 
-        # Simulation simplifiée
+        # Simulation
+        ## Getting external and internal values
         tempin = self.tempSensor.read()
         humin = self.humSensor.read()
-        
-        if self.window.isOn:
-            tempin -= random.uniform(0.1, 0.5)
-        else:
-            tempin += random.uniform(0.1, 0.3)
-
-        if self.irrigation.isOn:
-            humin += random.uniform(0.5, 1.0)
-        else:
-            humin -= random.uniform(0.2, 0.5)
-
         tempext, humext = dataset.s_to_values(self.data, self.time , ["T", "U"] )
-        humin += (humext - humin) * 0.01
-        tempin += (tempext - tempin) * 0.01
+
+        
+
+        exchange_coeff = 0.01 if self.windows.isOn else 0.001
+        temp_exchange_term = (tempext - tempin) * exchange_coeff
+
+        heat_term = 0.1 if self.heater.isOn else 0
+        cold_term = -0.1 if self.humidifier.isOn else 0
+
+        humidifier_term = 1 if self.humidifier.isOn else 0
+        humidity_exchange_term = 3 * exchange_coeff * (humext - humin)
+
+        dT = (temp_exchange_term + heat_term + cold_term) * dt #temperature delta
+        dU = (humidifier_term + humidity_exchange_term) * dt #humidity delta
+        
+
+        
+        humin += dU
+        tempin += dT
         
         self.tempSensor.update(tempin)
         self.humSensor.update(humin)
