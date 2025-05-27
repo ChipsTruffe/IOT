@@ -4,40 +4,40 @@ import time
 from config import *
 
 
-"""
-    def updateActuators(command):
-        match command:
-            case "heating on":
-                self.heater.powerOn()
-            case "heating off":
-                self.heater.powerOff()
-            case "windows open":
-                self.windows.powerOn()
-            case "windows close":
-                self.windows.powerOff()
-            case "humidifier on":
-                self.humidifier.powerOn()
-            case "humidifier off":
-                self.humidifier.powerOff()
-            case "irrigation on":
-                self.irrigation.powerOn()
-            case "irrigation off":
-                self.irrigation.powerOff()
-            case "nothing":
-                pass
-            case _:
-                print(f"Command '{command}' is not recognized")"""
-
-
 dt = 10 # en secondes
 
 
 client = ThingsBoardClient()
-env = Environment(CLIENT_ADDR, CLIENT_PORT)
+env = Environment()
+
+def updateActuators(control):
+    if control['window']:
+        env.window.powerOn()
+    else:
+        env.window.powerOff()
+    
+    if control['heater']:
+        env.heater.powerOn()
+    else:
+        env.heater.powerOff()
+
+    if control['irrigation']:
+        env.irrigation.powerOn()
+    else:
+        env.irrigation.powerOff()
+
+    if control['humidifier']:
+        env.humidifier.powerOn()
+    else:
+        env.humidifier.powerOff()
+ 
 
 while True:
     env.update(dt)  # Simule l'évolution du climat
     temp = env.tempSensor.read()
     hum = env.humSensor.read()
     client.publish(temp, hum)
+    control = client.get_controls_state()
+    updateActuators(control)
+
     time.sleep(5)

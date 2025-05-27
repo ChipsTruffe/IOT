@@ -6,9 +6,9 @@ from config import *
 
 
 class Environment:
-    def __init__(self, addr, port):
-        self.tempSensor = temperatureSensor(addr, port)
-        self.humSensor = humiditySensor(addr, port)
+    def __init__(self):
+        self.tempSensor = temperatureSensor()
+        self.humSensor = humiditySensor()
 
         self.windows = Actuator("WindowMotor")
         self.irrigation = Actuator("Irrigation")
