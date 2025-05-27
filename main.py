@@ -37,6 +37,7 @@ env = Environment(CLIENT_ADDR, CLIENT_PORT)
 
 while True:
     env.update(dt)  # Simule l'évolution du climat
-
-    #client.publish(temp, humidity)
+    temp = env.tempSensor.read()
+    hum = env.humSensor.read()
+    client.publish(temp, hum)
     time.sleep(5)
