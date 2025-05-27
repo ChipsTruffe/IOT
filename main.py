@@ -12,9 +12,9 @@ env = Environment()
 
 def updateActuators(control):
     if control['window']:
-        env.window.powerOn()
+        env.windows.powerOn()
     else:
-        env.window.powerOff()
+        env.windows.powerOff()
     
     if control['heater']:
         env.heater.powerOn()

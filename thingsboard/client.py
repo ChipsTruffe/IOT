@@ -3,11 +3,11 @@ import json
 import time
 
 
-# THINGSBOARD_TOKEN = "GreenHouseToken"
-# THINGSBOARD_HOST = "mqtt.thingsboard.cloud"
+THINGSBOARD_TOKEN = "GreenHouseToken"
+THINGSBOARD_HOST = "mqtt.thingsboard.cloud"
 
-THINGSBOARD_TOKEN = "greenhouse"
-THINGSBOARD_HOST = "localhost"
+#THINGSBOARD_TOKEN = "greenhouse"
+#THINGSBOARD_HOST = "localhost"
 
 
 class ThingsBoardClient:

@@ -1,7 +1,7 @@
 import random
 from devices.actuator import Actuator
 from devices.sensors import *
-import dataset
+from simulation.dataset import import_filter_data, s_to_values
 from config import *
 
 
@@ -15,7 +15,7 @@ class Environment:
         self.humidifier = Actuator("Humidifier")
         self.heater = Actuator("Heater")
 
-        self.data = dataset.import_filter_data(DATASETPATH_THEO, 2024110600,2025020612, 73329001)
+        self.data = import_filter_data(DATASETPATH_MALOE, 2024110600,2025020612, 73329001)
         self.time = 0 # en secondes
 
     def update(self, dt):
@@ -23,9 +23,9 @@ class Environment:
 
         # Simulation
         ## Getting external and internal values
-        tempin = self.tempSensor.read()
-        humin = self.humSensor.read()
-        tempext, humext = dataset.s_to_values(self.data, self.time , ["T", "U"] )
+        tempin = float(self.tempSensor.read())
+        humin = float(self.humSensor.read())
+        tempext, humext = s_to_values(self.data, self.time , ["T", "U"] ) #ask for T,U, get back T,U
 
         
 

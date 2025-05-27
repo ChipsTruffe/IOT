@@ -40,7 +40,7 @@ def s_to_values(data : pd.DataFrame, s : float, keys : list): # s un temps en se
     v1 = date_to_values(data, date1, keys)
     v2 = date_to_values(data, date2, keys)
 
-    return {key : (1-tau)*v1[key] + tau*v2[key] for key in keys}
+    return [ (1-tau)*v1[key] + tau*v2[key] for key in keys]
 
 #print(s_to_values(data, 6, ["T"]))
 
