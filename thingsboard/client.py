@@ -63,14 +63,16 @@ class ThingsBoardClient:
         self.client.disconnect()
 
 # Test de la connexion et publication
-client = ThingsBoardClient()
-print("Client démarré, en attente de messages RPC...")
+
 
 # Boucle principale pour maintenir le programme en vie
-try:
-    while True:
-        # Publication périodique des données
-        client.publish(22, 50)
-        time.sleep(10)  # Attendre 10 secondes entre chaque publication
-except KeyboardInterrupt:
-    print("\nArrêt du client...")
+if __name__ == "__main__":
+    client = ThingsBoardClient()
+    print("Client démarré, en attente de messages RPC...")
+    try:
+        while True:
+            # Publication périodique des données
+            client.publish(22, 50)
+            time.sleep(10)  # Attendre 10 secondes entre chaque publication
+    except KeyboardInterrupt:
+        print("\nArrêt du client...")
