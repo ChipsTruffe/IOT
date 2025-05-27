@@ -10,3 +10,5 @@ COMM_LINK = 'mosquitto_pub -d -q 1 -h mqtt.thingsboard.cloud -p 1883 -t v1/devic
 DATASETPATH_MALOE = "/home/maloe/dev/SPEIT/IOT/projet/H_73_latest-2024-2025.csv"
 DATASETPATH_THEO = ""
 DATASETPATH_BAPTISTE = ""
+
+download_dataset = "https://www.data.gouv.fr/fr/datasets/r/7c18ae09-a2bb-49f5-9f0d-990bc8df78ef"
