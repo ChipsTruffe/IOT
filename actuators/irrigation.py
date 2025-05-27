@@ -1,9 +1,4 @@
-class Irrigation:
-    def __init__(self):
-        self.on = False
+from actuator import Actuator
 
-    def on(self):
-        self.on = True
-
-    def off(self):
-        self.on = False
+class Irrigation(Actuator):
+    pass
