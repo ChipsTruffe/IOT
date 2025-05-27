@@ -31,17 +31,19 @@ def t_to_date(t: int, start_date: int): # t un nombre d'heures, start_date au fo
     # Format back to YYYYMMDDHH
     return int(new_date.strftime("%Y%m%d%H"))
 
-def t_to_values(data : pd.DataFrame, t : float, keys : list): # t un flottant quelconque, retourne les valeurs par interpolation linéaire entre les deux observations les plus proches
-    date1 = t_to_date(floor(t), int(data["AAAAMMJJHH"].iloc[0]))
-    date2 = t_to_date(floor(t)+1, int(data["AAAAMMJJHH"].iloc[0]))
+def s_to_values(data : pd.DataFrame, s : float, keys : list): # s un temps en secondes (flottant positif), retourne les valeurs par interpolation linéaire entre les deux observations les plus proches
+    
+    h = s / 3600
+    date1 = t_to_date(floor(h), int(data["AAAAMMJJHH"].iloc[0]))
+    date2 = t_to_date(floor(h)+1, int(data["AAAAMMJJHH"].iloc[0]))
 
-    tau = t - floor(t)
+    tau = h - floor(h)
 
     v1 = date_to_values(data, date1, keys)
     v2 = date_to_values(data, date2, keys)
 
     return {key : (1-tau)*v1[key] + tau*v2[key] for key in keys}
 
-print(t_to_values(data, 6, ["T"]))
+print(s_to_values(data, 6, ["T"]))
 
     
