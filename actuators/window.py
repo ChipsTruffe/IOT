@@ -1,9 +1,6 @@
-class Window:
-    def __init__(self):
-        self.open = False
+from actuator import Actuator
 
-    def open(self):
-        self.open = True
-
-    def close(self):
-        self.open = False
+class WindowMotor(Actuator):
+    def __init__(self, temperatureChange, humidityChange):
+        super().__init__(temperatureChange, humidityChange)
+    
