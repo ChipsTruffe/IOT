@@ -10,8 +10,6 @@ def import_filter_data(file, start_date, stop_date, place):
     data = data[data["AAAAMMJJHH"]>= start_date]
     return data
 
-data = import_filter_data("/home/maloe/dev/SPEIT/IOT/projet/H_73_latest-2024-2025.csv",2024110600,2024110612, 73329001)
-
 def date_to_values(data : pd.DataFrame, date : int , keys : list):
     for key in keys:
         if not key in data.keys():
@@ -44,6 +42,6 @@ def s_to_values(data : pd.DataFrame, s : float, keys : list): # s un temps en se
 
     return {key : (1-tau)*v1[key] + tau*v2[key] for key in keys}
 
-print(s_to_values(data, 6, ["T"]))
+#print(s_to_values(data, 6, ["T"]))
 
     

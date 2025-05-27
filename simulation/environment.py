@@ -1,23 +1,43 @@
 import random
+from devices.actuator import Actuator
+from devices.sensors import *
+import dataset
+from config import *
+
 
 class Environment:
-    def __init__(self, sensor, window, irrigation):
-        self.sensor = sensor
-        self.window = window
-        self.irrigation = irrigation
+    def __init__(self, addr, port):
+        self.tempSensor = temperatureSensor(addr, port)
+        self.humSensor = humiditySensor(addr, port)
 
-    def update(self):
-        temp, hum = self.sensor.read()
+        self.windows = Actuator("WindowMotor")
+        self.irrigation = Actuator("Irrigation")
+        self.humidifier = Actuator("Humidifier")
+        self.heater = Actuator("Heater")
+
+        self.data = dataset.import_filter_data(DATASETPATH_THEO, 2024110600,2025020612, 73329001)
+        self.time = 0 # en secondes
+
+    def update(self, dt):
+        self.time += dt # en secondes
 
         # Simulation simplifiée
-        if self.window.open:
-            temp -= random.uniform(0.1, 0.5)
+        tempin = self.tempSensor.read()
+        humin = self.humSensor.read()
+        
+        if self.window.isOn:
+            tempin -= random.uniform(0.1, 0.5)
         else:
-            temp += random.uniform(0.1, 0.3)
+            tempin += random.uniform(0.1, 0.3)
 
-        if self.irrigation.on:
-            hum += random.uniform(0.5, 1.0)
+        if self.irrigation.isOn:
+            humin += random.uniform(0.5, 1.0)
         else:
-            hum -= random.uniform(0.2, 0.5)
+            humin -= random.uniform(0.2, 0.5)
 
-        self.sensor.update(round(temp, 1), round(hum, 1))
+        tempext, humext = dataset.s_to_values(self.data, self.time , ["T", "U"] )
+        humin += (humext - humin) * 0.01
+        tempin += (tempext - tempin) * 0.01
+        
+        self.tempSensor.update(tempin)
+        self.humSensor.update(humin)
