@@ -1,0 +1,35 @@
+{
+  "name": "Greenhouse_profile",
+  "description": "",
+  "image": null,
+  "type": "DEFAULT",
+  "transportType": "DEFAULT",
+  "provisionType": "DISABLED",
+  "defaultRuleChainId": {
+    "entityType": "RULE_CHAIN",
+    "id": "49e0bc20-3a13-11f0-b0f4-a1b622ca795f"
+  },
+  "defaultDashboardId": {
+    "entityType": "DASHBOARD",
+    "id": "237fabb0-3a11-11f0-b0f4-a1b622ca795f"
+  },
+  "defaultQueueName": null,
+  "provisionDeviceKey": null,
+  "firmwareId": null,
+  "softwareId": null,
+  "defaultEdgeRuleChainId": null,
+  "default": false,
+  "profileData": {
+    "configuration": {
+      "type": "DEFAULT"
+    },
+    "transportConfiguration": {
+      "type": "DEFAULT"
+    },
+    "provisionConfiguration": {
+      "type": "DISABLED",
+      "provisionDeviceSecret": null
+    },
+    "alarms": null
+  }
+}
