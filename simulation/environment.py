@@ -35,8 +35,8 @@ class Environment:
         heat_term = 0.1 if self.heater.isOn else 0
         cold_term = -0.1 if self.humidifier.isOn else 0
 
-        humidifier_term = 1 if self.humidifier.isOn else 0
-        humidity_exchange_term = 3 * exchange_coeff * (humext - humin)
+        humidifier_term = 1 if self.humidifier.isOn else 0 
+        humidity_exchange_term = 3 * exchange_coeff * (humext - humin) #facteur 3 arbitraire
 
         dT = (temp_exchange_term + heat_term + cold_term) * dt #temperature delta
         dU = (humidifier_term + humidity_exchange_term) * dt #humidity delta
