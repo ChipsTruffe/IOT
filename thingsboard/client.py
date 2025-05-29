@@ -95,6 +95,19 @@ class ThingsBoardClient:
         if result.rc != mqtt.MQTT_ERR_SUCCESS:
             print(f"Erreur lors de la publication: {result.rc}")
         return result
+    
+    ##MODIFICATION A VOIR############################################
+    def publish_ext(self, temp, hum): 
+        payload = json.dumps({
+            "temperature_ext": temp,
+            "humidity_ext": hum
+        })
+        print(f"Publication des données: {payload}")
+        result = self.client.publish('v1/devices/me/telemetry', payload)
+        if result.rc != mqtt.MQTT_ERR_SUCCESS:
+            print(f"Erreur lors de la publication: {result.rc}")
+        return result
+    ##MODIFICATION A VOIR############################################
 
     def get_controls_state(self):
         """Retourne l'état actuel des contrôles"""

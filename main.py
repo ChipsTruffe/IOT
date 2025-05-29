@@ -4,7 +4,8 @@ import time
 from config import *
 
 
-dt = 10 # en secondes
+dt = 3600 # in seconds
+# WARNING : if dt is too high, the simulation overshoots and the values skyrockets 
 
 
 client = ThingsBoardClient()
@@ -36,7 +37,11 @@ while True:
     env.update(dt)  # Simule l'évolution du climat
     temp = env.tempSensor.read()
     hum = env.humSensor.read()
+
+    tempext = env.tempext
+    humext = env.humext
     client.publish(temp, hum)
+    client.publish_ext(tempext,humext)
     control = client.get_controls_state()
     updateActuators(control)
 
