@@ -16,7 +16,7 @@ class Environment:
         self.humidifier = Actuator("Humidifier")
         self.heater = Actuator("Heater")
 
-        self.data = import_filter_data(DATASETPATH_MALOE, 2024110600,2025020612, 73329001)
+        self.data = import_filter_data(DATASETPATH_MALOE, 2024060611,2025020612, 73329001)
         self.time = 0 # en secondes
 
 ##MODIFICATION (A VOIR)############################################
@@ -35,27 +35,25 @@ class Environment:
 
         
 
-        exchange_coeff = 0.01 if self.windows.isOn else 0.001
-        temp_exchange_term = (self.tempext - tempin) * exchange_coeff
+        T_exchange_coeff = (10 if self.windows.isOn else 3) * 1000 # transfer coeff * surface area
+        T_capacitance = 5 * 10**5 #found online
 
-        heat_term = 0.1 if self.heater.isOn else 0
-        cold_term = -0.1 if self.humidifier.isOn else 0
+        U_exchange_coeff = (20 if self.windows.isOn else 1) * 1000  # transfer coeff * surface area
+        U_capacitance = 5 * 10**5 #to tweak
 
-        humidifier_term = 1 if self.humidifier.isOn else 0 
-        humidity_exchange_term = 10 * exchange_coeff * (self.humext - humin) #facteur arbitraire
+        heater_term = 30000 if self.heater.isOn else 0 #to tweak
+        humidifier_term = 5000 if self.humidifier.isOn else 0 #to tweak
 
-        dT = (temp_exchange_term + heat_term + cold_term) #* dt #temperature delta
-        dU = (humidifier_term + humidity_exchange_term) #* dt #humidity delta
+        target_U = self.humext + (humidifier_term) / U_exchange_coeff
+        U_tau = U_capacitance / U_exchange_coeff
         
+        target_T = self.tempext +  (heater_term - humidifier_term) / T_exchange_coeff
+        T_tau = T_capacitance / T_exchange_coeff #caracteristic time   
 
 
-        humin += dU
-        tempin += dT
+        tempin = target_T + (tempin - target_T)*e**(-dt / T_tau)
+        humin = target_U + (humin - target_U)*e**(-dt / U_tau)
 
-        ##If datas are not physically coherent, clip them
-
-        #humin = 100 * 1/(1+e**(-(humin-50))) #Sigmoid centered at 50, ranging 0 to 100
-        #tempin = min(max(tempin,-273.15),200) #dumb clip 
         
         self.tempSensor.update(tempin)
         self.humSensor.update(humin)

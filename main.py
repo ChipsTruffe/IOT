@@ -4,8 +4,8 @@ import time
 from config import *
 
 
-dt = 3600 # in seconds
-# WARNING : if dt is too high, the simulation overshoots and the values skyrockets 
+dt = 600 # in seconds
+ 
 
 
 client = ThingsBoardClient()
