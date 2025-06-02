@@ -5,3 +5,4 @@ db.csv
 *.pyw
 *.pyz
 *.pywz
+docker-compose.yml
