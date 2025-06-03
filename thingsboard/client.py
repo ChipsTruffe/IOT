@@ -3,11 +3,11 @@ import json
 import time
 
 
-THINGSBOARD_TOKEN = "GreenHouseToken"
-THINGSBOARD_HOST = "mqtt.thingsboard.cloud"
+# THINGSBOARD_TOKEN = "GreenHouseToken"
+# THINGSBOARD_HOST = "mqtt.thingsboard.cloud"
 
-#THINGSBOARD_TOKEN = "greenhouse"
-#THINGSBOARD_HOST = "localhost"
+THINGSBOARD_TOKEN = "greenhouse"
+THINGSBOARD_HOST = "127.0.0.1"
 
 
 class ThingsBoardClient:
@@ -52,27 +52,25 @@ class ThingsBoardClient:
         try:
             # Décodage du payload JSON
             payload = json.loads(msg.payload.decode())
+            method = payload.get('method')
+            params = payload.get('params', {})
             
-            # Vérification si c'est une commande de contrôle
-            if payload.get('method') == 'control':
-                params = payload.get('params', {})
-                # Mise à jour des états
-                if 'window' in params:
-                    self.controls['window'] = params['window']
-                if 'irrigation' in params:
-                    self.controls['irrigation'] = params['irrigation']
-                if 'humidifier' in params:
-                    self.controls['humidifier'] = params['humidifier']
-                if 'heater' in params:
-                    self.controls['heater'] = params['heater']
-                
-                print(f"État des contrôles mis à jour: {self.controls}")
-                
-                # Envoi d'une réponse de confirmation
-                request_id = msg.topic.split('/')[-1]
-                response = {"success": True, "controls": self.controls}
-                response_topic = f"v1/devices/me/rpc/response/{request_id}"
-                self.client.publish(response_topic, json.dumps(response))
+            # Mapping des méthodes aux contrôles
+            control_mapping = {
+                'setHumidifier': ('humidifier', lambda x: x == "ON"),
+                'setIrrigation': ('irrigation', lambda x: x == "ON"),
+                'setHeater': ('heater', lambda x: x == "ON"),
+                'setWindow': ('window', lambda x: x == "OPEN")
+            }
+            
+            # Traitement des commandes individuelles
+            if method in control_mapping:
+                control_name, value_converter = control_mapping[method]
+                value = params.get('value', 'OFF')
+                self.controls[control_name] = value_converter(value)
+                print(f"Contrôle {control_name} mis à jour: {self.controls[control_name]}")
+            
+            
                 
         except json.JSONDecodeError as e:
             print(f"Erreur de décodage JSON: {e}")

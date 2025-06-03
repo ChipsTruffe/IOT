@@ -16,7 +16,7 @@ class Environment:
         self.humidifier = Actuator("Humidifier")
         self.heater = Actuator("Heater")
 
-        self.data = import_filter_data(DATASETPATH_MALOE, 2024060611,2025020612, 73329001)
+        self.data = import_filter_data(DATASETPATH_BAPTISTE, 2024060611,2025020612, 73329001)
         self.time = 0 # en secondes
 
 ##MODIFICATION (A VOIR)############################################

@@ -6,3 +6,4 @@ db.csv
 *.pyz
 *.pywz
 docker-compose.yml
+__pycache__/
